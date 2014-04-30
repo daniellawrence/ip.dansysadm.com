@@ -19,6 +19,25 @@ We started to use this to find out the ip's...
 	  "ip": "58.17.13.21"
 	}
 
+json
+	$ curl ip.dansysadm.com?json
+	{
+	  "ip": "58.17.13.21"
+	}
+	
+yaml
+	$ curl ip.dansysadm.com?yaml
+	---
+	ip: 1.2.3.4
+	
+plain, txt
+	$ curl ip.dansysadm.com?{plain,txt,text}
+	1.2.3.4
+	
+bash, zsh, ksh
+	$ curl ip.dansysadm.com?{bash,zsh,ksh}
+	IP=1.2.3.4
+
 
 Getting started
 ===============
