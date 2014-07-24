@@ -5,12 +5,16 @@ from flask import jsonify
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def get_my_ip():
     ip = request.headers.get('X-Forwarded-For')
     if not ip:
         ip = request.remote_addr
+
+    data = {'ip': ip, 'cidr': '%s/32' % ip}
+    if request.user_agent.browser:
+        return "<h1>Tell Danny your IP is '%s'</h1>" % ip
+                
 
     if 'json' in request.args:
         return jsonify({'ip': ip, 'cidr': '%s/32' % ip}), 200
