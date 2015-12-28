@@ -1,0 +1,50 @@
+- hosts: ip.dansysadm.com
+  gather_facts: yes   
+  vars:
+    git_repo: http://github.com/daniellawrence/ip.dansysadm.com
+    deploy_dir: /usr/local/ip
+    
+  tasks:
+  - name: new ip user
+    user: name=ip shell=/bin/false home=/usr/local/ip
+    sudo: yes
+  - name: Update apt-cache [apt]
+    apt: "update_cache=yes"
+    sudo: yes
+  - name: Install python & co [apt]
+    apt: "pkg={{item}} state=present"
+    sudo: yes
+    with_items: [
+      "git",
+      "python",
+      "python-dev",
+      "python-pip",
+      "nginx"
+      ]
+  - name: mkdir {{deploy_dir}}
+    file: path={{deploy_dir}} state=directory
+  - name: ip owns {{deploy_dir}}
+    file: path={{deploy_dir}} owner=ip group=ip recurse=yes
+    sudo: yes
+  - name: git clone {{git_repo}}
+    git: repo={{git_repo}}
+         dest={{deploy_dir}}
+    sudo: yes
+  - name: pip install requirements.txt
+    pip: requirements={{deploy_dir}}/requirements.txt    
+    sudo: yes
+  - name: Install ip-nginx.conf
+    template: src=ip-nginx.conf dest=/etc/nginx/sites-enabled/ip owner=root group=root mode=0644
+    sudo: yes
+  - name: Install ip-upstart.conf
+    template: src=ip-upstart.conf dest=/etc/init/ip.conf owner=root group=root mode=0644
+    sudo: yes
+  - name: start nginx and ip service
+    service: name={{item}} state=started enabled=yes
+    sudo: yes
+    with_items: [
+      "nginx",
+      "ip"
+   ]
+    
+    

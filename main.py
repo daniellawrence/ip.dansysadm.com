@@ -7,7 +7,9 @@ import random
 
 app = Flask(__name__)
 
+
 KNOWN_IPS = defaultdict(str)
+
 
 @app.route("/")
 def get_my_ip():
@@ -29,6 +31,9 @@ def get_my_ip():
         changed = True
 
 
+    data = {'ip': ip, 'cidr': '%s/32' % ip}
+    if request.user_agent.browser:
+        return "<h1>Tell Danny your IP is '%s'</h1>" % ip
 
     if 'json' in request.args:
         return jsonify({'ip': ip, 'cidr': '%s/32' % ip}), 200
@@ -50,6 +55,6 @@ def get_my_ip():
     }
     ), 200
 
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
-#
