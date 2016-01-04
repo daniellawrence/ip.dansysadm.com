@@ -1,8 +1,6 @@
 ip.dansysadm.com
 ================
 
-What is powering `ip.dansysadm.com`
-
 Why?
 ====
 
@@ -53,7 +51,7 @@ Getting started
 	$ ./main.py
 
 
-Getting started production, lawls 
+Getting started production, lulz
 =================================
 
 DON'T
